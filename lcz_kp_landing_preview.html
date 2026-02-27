@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Коммерческое предложение - ЛКЗ</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --surface: #f3f4f6;
+        --surface-strong: #ffffff;
+        --text: #191b1e;
+        --muted: #5f6773;
+        --accent: #3fdc80;
+        --accent-strong: #2cc56a;
+        --accent-soft: rgba(63, 220, 128, 0.12);
+        --shadow: none;
+        --shadow-soft: none;
+        --topbar-radius: 22px;
+        --topbar-inset: 12px;
+        --topbar-inner-radius: calc(var(--topbar-radius) - var(--topbar-inset));
+        --frame-radius: 28px;
+        --frame-inset: 16px;
+        --inner-frame-radius: calc(var(--frame-radius) - var(--frame-inset));
+        --radius-xl: var(--frame-radius);
+        --radius-lg: var(--inner-frame-radius);
+        --radius-md: 18px;
+        --container: 1180px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      .shell {
+        width: min(var(--container), calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar-wrap {
+        position: fixed;
+        top: 14px;
+        left: 0;
+        right: 0;
+        z-index: 30;
+        padding-top: 0;
+        transition: transform 0.32s ease, opacity 0.24s ease;
+        will-change: transform;
+      }
+
+      .topbar-wrap.is-hidden {
+        transform: translateY(calc(-100% - 18px));
+      }
+
+      .topbar-wrap.is-scrolled .topbar {
+        background: rgba(243, 244, 246, 0.72);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+
+      .topbar-wrap.is-scrolled .mobile-menu {
+        background: rgba(243, 244, 246, 0.82);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: var(--topbar-inset);
+        margin-bottom: 18px;
+        background: var(--surface);
+        border-radius: var(--topbar-radius);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        min-width: 0;
+        flex: 0 0 auto;
+      }
+
+      .brand-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 152px;
+        min-height: 56px;
+        padding: 10px 14px;
+        border-radius: var(--topbar-inner-radius);
+        background: var(--surface-strong);
+      }
+
+      .brand-mark img {
+        width: 100%;
+        max-width: 122px;
+        max-height: 30px;
+        object-fit: contain;
+      }
+
+      .brand-mark-fallback {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.02em;
+      }
+
+      .desktop-nav {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-left: auto;
+      }
+
+      .desktop-nav a,
+      .mobile-menu a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 42px;
+        padding: 10px 14px;
+        border-radius: var(--topbar-inner-radius);
+        font-size: 14px;
+        line-height: 1;
+        color: var(--muted);
+        transition: background-color 0.2s ease, color 0.2s ease;
+      }
+
+      .desktop-nav a:hover,
+      .desktop-nav a:focus-visible,
+      .mobile-menu a:hover,
+      .mobile-menu a:focus-visible {
+        background: var(--surface-strong);
+        color: var(--text);
+        outline: none;
+      }
+
+      .burger {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        margin-left: auto;
+        border-radius: var(--topbar-inner-radius);
+        background: var(--surface-strong);
+        color: var(--text);
+        cursor: pointer;
+        border: none;
+      }
+
+      .burger svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .burger svg path {
+        stroke: currentColor;
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        transform-box: fill-box;
+        transform-origin: center;
+        transition: transform 0.24s ease, opacity 0.2s ease;
+      }
+
+      .burger.is-open svg path:nth-of-type(1) {
+        transform: translateY(5px) rotate(45deg);
+      }
+
+      .burger.is-open svg path:nth-of-type(2) {
+        opacity: 0;
+      }
+
+      .burger.is-open svg path:nth-of-type(3) {
+        transform: translateY(-5px) rotate(-45deg);
+      }
+
+      .mobile-menu {
+        display: none;
+        margin: -6px 0 18px;
+        padding: 10px;
+        background: rgba(243, 244, 246, 0.82);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: var(--topbar-radius);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .mobile-menu.is-open {
+        display: grid;
+        gap: 4px;
+      }
+
+      main {
+        padding-top: 112px;
+        padding-bottom: 8px;
+      }
+
+      section {
+        margin-bottom: 22px;
+      }
+
+      main > section:last-of-type {
+        margin-bottom: 8px;
+      }
+
+      .mobile-break {
+        display: none;
+      }
+
+      .reveal-on-scroll {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+        will-change: opacity, transform;
+      }
+
+      .reveal-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reveal-on-scroll {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 22px;
+        align-items: stretch;
+      }
+
+      .panel {
+        background: var(--surface);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+      }
+
+      .hero-main {
+        padding: 34px;
+        min-height: 480px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        width: fit-content;
+        min-height: 40px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: var(--surface-strong);
+        color: var(--accent-strong);
+        font-size: 12px;
+        line-height: 1;
+        font-weight: 700;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .hero-copy h1 {
+        margin: 18px 0 0;
+        max-width: none;
+        white-space: nowrap;
+        font-size: clamp(40px, 6vw, 72px);
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+      }
+
+      .hero-copy p {
+        margin: 0;
+        max-width: 640px;
+        font-size: clamp(16px, 2vw, 19px);
+        line-height: 1.65;
+        color: var(--muted);
+      }
+
+      .hero-micro {
+        margin-top: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .chip {
+        padding: 10px 13px;
+        border-radius: 999px;
+        background: var(--surface-strong);
+        font-size: 13px;
+        line-height: 1;
+        color: #4f5661;
+      }
+
+      .hero-bottom {
+        margin-top: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 56px;
+        padding: 15px 22px;
+        border-radius: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        border: none;
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        transform: translateY(-1px);
+        outline: none;
+      }
+
+      .button-secondary {
+        color: var(--text);
+        background: var(--surface-strong);
+      }
+
+      .button-secondary:hover,
+      .button-secondary:focus-visible {
+        box-shadow: var(--shadow-soft);
+      }
+
+      .hero-side {
+        display: grid;
+      }
+
+      .price-card {
+        padding: var(--frame-inset);
+        background: #3fdc80;
+        color: #ffffff;
+        box-shadow: none;
+      }
+
+      .label {
+        margin: 0 0 10px;
+        font-size: 12px;
+        line-height: 1.2;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .price-meta {
+        display: grid;
+        gap: 6px;
+      }
+
+      .price-meta-item {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.45;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+      }
+
+      .price-divider {
+        width: 100%;
+        height: 1px;
+        margin: 16px 0;
+        background: rgba(255, 255, 255, 0.56);
+      }
+
+      .section-divider {
+        width: 100%;
+        height: 1px;
+        margin: 16px 0;
+        background: rgba(25, 27, 30, 0.06);
+      }
+
+      #roadmap .section-divider {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .section-head.section-head-stack {
+        display: grid;
+        align-items: stretch;
+        justify-content: stretch;
+        gap: 0;
+        margin-bottom: 16px;
+      }
+
+      .section-head.section-head--compact {
+        margin-bottom: 0;
+      }
+
+      .section-accent {
+        background: #3fdc80;
+      }
+
+      .section-accent .section-head h2 {
+        color: #ffffff;
+      }
+
+      .section-accent .section-divider {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      
+      .price-title {
+        margin: 0 0 10px;
+        font-size: 12px;
+        line-height: 1.2;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .price-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .price-value {
+        position: relative;
+        display: inline-block;
+        margin: 0;
+        color: #ffffff;
+        font-size: clamp(56px, 7vw, 88px);
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+      }
+
+      .price-value::after {
+        content: "";
+        position: absolute;
+        left: -2%;
+        right: -2%;
+        top: 52%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.95);
+        opacity: 0;
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 1s ease, opacity 0.35s ease;
+      }
+
+      .price-value.is-struck::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+
+      .price-discount {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #1ea85a;
+        font-size: 13px;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        opacity: 0;
+        transform: translateX(8px);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+        pointer-events: none;
+      }
+
+      .price-discount.is-visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .price-caption {
+        margin: 0;
+        color: #ffffff;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .section-panel {
+        padding: var(--frame-inset);
+      }
+
+      .section-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: clamp(24px, 4vw, 38px);
+        line-height: 1.02;
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+      }
+
+      .section-head p {
+        margin: 0;
+        max-width: 640px;
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .offer-grid,
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .feature-card,
+      .deliver-card,
+      .timeline-card,
+      .detail-card {
+        padding: 22px;
+        border-radius: var(--inner-frame-radius);
+        background: var(--surface-strong);
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .feature-card:hover,
+      .deliver-card:hover,
+      .timeline-card:hover,
+      .detail-card:hover {
+        transform: translateY(-2px);
+        box-shadow: none;
+      }
+
+      .card-index {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        margin-bottom: 14px;
+        background: #3fdc80;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .feature-card h3,
+      .deliver-card h3,
+      .timeline-card h3,
+      .detail-card h3 {
+        margin: 0 0 10px;
+        font-size: 20px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+      }
+
+      .feature-card p,
+      .deliver-card p,
+      .timeline-card p,
+      .detail-card p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .feature-list {
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 10px;
+      }
+
+      .feature-list li {
+        position: relative;
+        padding-left: 16px;
+        font-size: 11px;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        color: #4f5661;
+      }
+
+      .feature-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      #roadmap {
+        background: #191b1e;
+        box-shadow: none;
+      }
+
+      #roadmap .section-head h2,
+      #roadmap .section-head p,
+      #roadmap .timeline-card h3,
+      #roadmap .timeline-card p {
+        color: #ffffff;
+      }
+
+      #roadmap .timeline {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      #roadmap .timeline-card {
+        min-height: 100%;
+        padding: 20px;
+        background: #24282d;
+        box-shadow: none;
+      }
+
+      .timeline-step {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 10px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        background: rgba(63, 220, 128, 0.14);
+        color: #7ef0ad;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .timeline-card h3 {
+        font-size: 17px;
+        min-height: 2.5em;
+      }
+
+      .timeline-card p {
+        font-size: 13px;
+        line-height: 1.65;
+      }
+
+      .cta-box {
+        padding: var(--frame-inset);
+        border-radius: var(--frame-radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .cta-box h2 {
+        margin: 0 0 12px;
+        color: var(--text);
+        max-width: none;
+        white-space: nowrap;
+        font-size: clamp(28px, 4vw, 46px);
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+      }
+
+      .cta-box p {
+        margin: 0;
+        max-width: 720px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--muted);
+      }
+
+      .cta-box .label {
+        color: #ffffff;
+      }
+
+      .cta-actions {
+        margin-top: 22px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .cta-telegram {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 56px;
+        padding: 16px 24px;
+        border-radius: 16px;
+        background: var(--accent);
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 800;
+        box-shadow: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      }
+
+      .cta-telegram:hover,
+      .cta-telegram:focus-visible {
+        transform: translateY(-1px);
+        background: #53e48f;
+        box-shadow: none;
+        outline: none;
+      }
+
+      .carousel-track {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .carousel-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .detail-grid--3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .detail-card h3 {
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      .detail-card p {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 1180px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-main {
+          min-height: unset;
+        }
+
+        .offer-grid,
+        .result-grid,
+        .detail-grid,
+        .detail-grid--3,
+        #roadmap .timeline {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 760px) {
+        :root {
+          --topbar-radius: 28px;
+          --topbar-inset: 10px;
+          --topbar-inner-radius: calc(var(--topbar-radius) - var(--topbar-inset));
+        }
+        .shell {
+          width: min(var(--container), calc(100% - 20px));
+        }
+
+        .topbar-wrap {
+          top: 10px;
+        }
+
+        .topbar,
+        .hero-main,
+        .price-card,
+        .section-panel,
+        .cta-box {
+          border-radius: var(--frame-radius);
+        }
+
+        .feature-card,
+        .deliver-card,
+        .timeline-card,
+        .detail-card {
+          border-radius: var(--inner-frame-radius);
+        }
+
+        .topbar {
+          justify-content: space-between;
+          gap: 12px;
+          padding: var(--topbar-inset);
+        }
+
+        .desktop-nav {
+          display: none;
+        }
+
+        .burger {
+          display: inline-flex;
+        }
+
+        .hero-main,
+        .price-card,
+        .section-panel,
+        .cta-box {
+          padding: var(--frame-inset);
+        }
+
+        main {
+          padding-top: 98px;
+        }
+
+        .hero-copy h1,
+        .price-value,
+        .section-head h2,
+        .cta-box h2 {
+          letter-spacing: -0.03em;
+        }
+
+        .hero-copy h1 {
+          font-size: clamp(30px, 8vw, 34px);
+        }
+
+        .section-head h2 {
+          font-size: clamp(22px, 6vw, 24px);
+        }
+
+        .cta-box h2 {
+          font-size: clamp(22px, 6vw, 24px);
+        }
+
+        .hero-bottom,
+        .cta-actions,
+        .section-head {
+          align-items: stretch;
+        }
+
+        .button,
+        .cta-telegram {
+          width: 100%;
+        }
+
+        .brand-mark {
+          width: 140px;
+          min-height: 52px;
+        }
+
+        .mobile-break {
+          display: block;
+        }
+
+        .price-badges {
+          gap: 8px;
+        }
+
+        .offer-grid,
+        .result-grid,
+        .detail-grid,
+        .detail-grid--3,
+        #roadmap .timeline {
+          display: flex;
+          gap: 14px;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
+          scroll-snap-type: x mandatory;
+          scroll-padding-left: 0;
+          padding: 0;
+          align-items: stretch;
+        }
+
+        .feature-card,
+        .deliver-card,
+        .timeline-card,
+        .detail-card {
+          flex: 0 0 min(84vw, 300px);
+          width: min(84vw, 300px);
+          min-height: auto;
+          scroll-snap-align: start;
+        }
+
+        .timeline-card h3 {
+          min-height: 0;
+        }
+      }
+
+      .page-credit {
+        margin: 0 0 12px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.4;
+        color: rgba(25, 27, 30, 0.18);
+        letter-spacing: -0.01em;
+      }
+
+      @media (max-width: 420px) {
+        .section-head h2,
+        .cta-box h2 {
+          font-size: 22px;
+        }
+
+        .price-value {
+          font-size: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar-wrap shell">
+      <header class="topbar" aria-label="Навигация по странице">
+        <div class="brand">
+          <div class="brand-mark">
+            <img src="assets/logo.svg" alt="Симбирские краски" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
+            <span class="brand-mark-fallback">Симбирские краски</span>
+          </div>
+        </div>
+
+        <nav class="desktop-nav" aria-label="Навигация по разделам">
+          <a href="#offer">Состав</a>
+          <a href="#roadmap">Этапы</a>
+          <a href="#price">Стоимость</a>
+          <a href="#result">Результат</a>
+        </nav>
+
+        <button class="burger" id="burgerButton" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+            <path d="M4 7H20"></path>
+            <path d="M4 12H20"></path>
+            <path d="M4 17H20"></path>
+          </svg>
+        </button>
+      </header>
+
+      <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильная навигация">
+        <a href="#offer">Состав</a>
+        <a href="#roadmap">Этапы</a>
+        <a href="#price">Стоимость</a>
+        <a href="#result">Результат</a>
+      </nav>
+    </div>
+
+    <main class="shell">
+      <section class="hero" id="top">
+        <div class="hero-main panel">
+          <div class="hero-copy">
+            <span class="eyebrow">Коммерческое предложение</span>
+            <h1>Разработка сайта</h1>
+            <div class="section-divider" aria-hidden="true"></div>
+            <p>
+              Готовый цифровой проект<span class="mobile-break"></span>
+              для "Симбирские краски" (ЛКЗ):<span class="mobile-break"></span>
+              продуманная структура, аккуратная презентация продукта, удобный каталог,<span class="mobile-break"></span>
+              карточки товаров, документация, формы<span class="mobile-break"></span>
+              обращений и рабочая админ-панель<span class="mobile-break"></span>
+              для дальнейшего управления контентом.
+            </p>
+
+            <div class="section-divider" aria-hidden="true"></div>
+
+            <div class="hero-micro" aria-label="Ключевые акценты">
+              <span class="chip">Desktop + mobile</span>
+              <span class="chip">Каталог + админ-панель</span>
+              <span class="chip">Чистая структура</span>
+              <span class="chip">Интеграция с MAX</span>
+            </div>
+
+            <div class="section-divider" aria-hidden="true"></div>
+          </div>
+
+          <div class="hero-bottom">
+            <a class="button button-secondary" href="#offer">Смотреть состав проекта</a>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="offer" class="panel section-panel">
+        <div class="section-head section-head-stack">
+          <div>
+            <h2>Что входит в предложение</h2>
+          </div>
+          <div class="section-divider" aria-hidden="true"></div>
+          <p>
+            Состав собран так, чтобы закрыть не только внешний вид сайта, но и внутреннюю логику управления:
+            от структуры и сценариев до рабочего сайта с каталогом и админ-панелью.
+          </p>
+        </div>
+
+        <div class="offer-grid carousel-track">
+          <article class="feature-card">
+            <span class="card-index">01</span>
+            <h3>Проектная<br />документация</h3>
+            <p>Фиксация архитектуры решения до старта разработки, чтобы весь объём был понятен заранее.</p>
+            <ul class="feature-list">
+              <li>структура сайта и карта разделов</li>
+              <li>сценарии пользователя и CTA-логика</li>
+              <li>модель каталога и базовая логика сущностей</li>
+            </ul>
+          </article>
+
+          <article class="feature-card">
+            <span class="card-index">02</span>
+            <h3>UX и информационная<br />архитектура</h3>
+            <p>Сначала выстраивается удобный путь пользователя, а уже потом визуальная упаковка.</p>
+            <ul class="feature-list">
+              <li>навигация и переходы между разделами</li>
+              <li>wireframes ключевых страниц</li>
+              <li>кликабельный прототип для согласования</li>
+            </ul>
+          </article>
+
+          <article class="feature-card">
+            <span class="card-index">03</span>
+            <h3>UI-дизайн<br />и дизайн-система</h3>
+            <p>Единый визуальный язык, который делает проект аккуратным, цельным и узнаваемым.</p>
+            <ul class="feature-list">
+              <li>визуальная концепция и направление</li>
+              <li>типографика, сетка, кнопки, поля, состояния</li>
+              <li>адаптивные макеты для mobile</li>
+            </ul>
+          </article>
+
+          <article class="feature-card">
+            <span class="card-index">04</span>
+            <h3>MVP<br />разработка</h3>
+            <p>Реализация публичной части сайта и внутренней системы управления без лишней сложности.</p>
+            <ul class="feature-list">
+              <li>главная, каталог, карточки товаров</li>
+              <li>поиск, фильтры, форма запроса</li>
+              <li>интеграция Telegram и базовая SEO-подготовка</li>
+            </ul>
+          </article>
+
+          <article class="feature-card">
+            <span class="card-index">05</span>
+            <h3>Админ<br />панель</h3>
+            <p>Управление товарами, категориями, параметрами и файлами без постоянного участия разработчика.</p>
+            <ul class="feature-list">
+              <li>роли и доступы</li>
+              <li>CRUD по товарам и категориям</li>
+              <li>работа с документами, файлами и заявками</li>
+            </ul>
+          </article>
+
+          <article class="feature-card">
+            <span class="card-index">06</span>
+            <h3>Тестирование,<br />запуск и передача</h3>
+            <p>Финальная полировка, релиз, стабилизация и ввод команды заказчика в работу.</p>
+            <ul class="feature-list">
+              <li>QA, регресс, кроссбраузерная проверка</li>
+              <li>выкатка и проверка после релиза</li>
+              <li>обучение и передача доступов</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="roadmap" class="panel section-panel">
+        <div class="section-head section-head-stack">
+          <div>
+            <h2>Этапы реализации</h2>
+          </div>
+          <div class="section-divider" aria-hidden="true"></div>
+          <p>
+            Работа идёт по предсказуемой траектории: выравниваем требования, затем проектируем,
+            после этого собираем дизайн, реализуем MVP и доводим его до рабочего запуска.
+          </p>
+        </div>
+
+        <div class="timeline carousel-track">
+          <article class="timeline-card">
+            <span class="timeline-step">0-2</span>
+            <h3>Подготовка</h3>
+            <p>Сбор требований, аудит, структурирование базового ТЗ и сопровождение передачи материалов.</p>
+          </article>
+
+          <article class="timeline-card">
+            <span class="timeline-step">3</span>
+            <h3>Документация</h3>
+            <p>Приложения к ТЗ: структура, сценарии, модель каталога, админ-логика, формы и дорожная карта проекта.</p>
+          </article>
+
+          <article class="timeline-card">
+            <span class="timeline-step">4</span>
+            <h3>UX / IA</h3>
+            <p>Детализируем навигацию, собираем wireframes ключевых страниц и согласуем кликабельный прототип.</p>
+          </article>
+
+          <article class="timeline-card">
+            <span class="timeline-step">5</span>
+            <h3>UI-дизайн</h3>
+            <p>Закрепляем визуальное направление, дизайн-систему и готовим макеты к передаче в разработку.</p>
+          </article>
+
+          <article class="timeline-card">
+            <span class="timeline-step">6</span>
+            <h3>Разработка MVP</h3>
+            <p>Собираем сайт, каталог, формы, Telegram-уведомления, SEO-базу и полноценную админ-панель.</p>
+          </article>
+
+          <article class="timeline-card">
+            <span class="timeline-step">7-8</span>
+            <h3>Проверка и запуск</h3>
+            <p>Проводим QA, исправляем замечания, выкатываем релиз, проверяем систему и стабилизируем проект после запуска.</p>
+          </article>
+
+          <article class="timeline-card">
+            <span class="timeline-step">9</span>
+            <h3>Передача</h3>
+            <p>Даём инструкции, проводим обучающий созвон, передаём доступы и фиксируем итоговый состав проекта.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="price">
+        <div class="price-card panel">
+          <div class="price-meta">
+            <p class="price-meta-item">Стоимость часа: 1600 ₽</p>
+            <p class="price-meta-item">Общее количество часов: 105</p>
+          </div>
+
+          <div class="price-divider" aria-hidden="true"></div>
+
+          <p class="price-title">Итоговая стоимость</p>
+          <div class="price-row">
+            <h2 class="price-value">149 900 ₽</h2>
+            <span class="price-discount" aria-hidden="true">– 5%</span>
+          </div>
+
+          <div class="price-divider" aria-hidden="true"></div>
+
+          <p class="price-caption">
+            Полный цикл работ в рамках согласованного объёма: от проектной подготовки и UX до разработки, запуска и передачи.
+          </p>
+        </div>
+      </section>
+
+      <section id="result" class="panel section-panel">
+        <div class="section-head section-head-stack section-head--compact">
+          <div>
+            <h2>Результат</h2>
+          </div>
+          <div class="section-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="result-grid carousel-track">
+          <article class="deliver-card">
+            <h3>Чёткая структура проекта</h3>
+            <p>Согласованная логика разделов, сценариев, интерфейсных переходов и приоритетов контента.</p>
+          </article>
+
+          <article class="deliver-card">
+            <h3>Полный набор макетов</h3>
+            <p>Ключевые экраны для desktop и mobile, подготовленные к работе разработчиков и дальнейшей поддержке.</p>
+          </article>
+
+          <article class="deliver-card">
+            <h3>Каталог продукции</h3>
+            <p>Листинг, карточки товаров,<span class="mobile-break"></span> документы, параметры,<span class="mobile-break"></span> поиск и фильтрация.</p>
+          </article>
+
+          <article class="deliver-card">
+            <h3>Импорт ассортимента</h3>
+            <p>Подготовка механики<span class="mobile-break"></span> начальной загрузки данных<span class="mobile-break"></span> по товарам до 300 SKU.</p>
+          </article>
+
+          <article class="deliver-card">
+            <h3>Панель управления</h3>
+            <p>Управление товарами, категориями, параметрами, файлами, заявками и частью SEO-полей.</p>
+          </article>
+
+          <article class="deliver-card">
+            <h3>Запуск и эксплуатация</h3>
+            <p>Стабилизированный релиз, доступы, инструкция по админке и понятный контур дальнейшей работы.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel section-panel">
+        <div class="section-head section-head-stack section-head--compact">
+          <div>
+            <h2>Сроки и условия</h2>
+          </div>
+          <div class="section-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="detail-grid carousel-track">
+          <article class="detail-card">
+            <h3>Срок разработки</h3>
+            <p>До 20 рабочих дней при своевременной обратной связи.</p>
+          </article>
+
+          <article class="detail-card">
+            <h3>Тесты и ожидания правок</h3>
+            <p>Идут отдельно от этих 20 дней.</p>
+          </article>
+
+          <article class="detail-card">
+            <h3>Оплата</h3>
+            <p>По умолчанию 50/50 (возможен другой порядок по согласованию).</p>
+          </article>
+
+          <article class="detail-card">
+            <h3>Действие КП</h3>
+            <p>14 календарных дней.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel section-panel section-accent">
+        <div class="section-head section-head-stack section-head--compact">
+          <div>
+            <h2>Гарантии и сопровождение</h2>
+          </div>
+          <div class="section-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="detail-grid detail-grid--3 carousel-track">
+          <article class="detail-card">
+            <h3>Гарантия на 5 лет</h3>
+            <p>На наш программный код (исправление багов и недочётов).</p>
+          </article>
+
+          <article class="detail-card">
+            <h3>Техобслуживание</h3>
+            <p>Без ограничения по сроку: мониторинг доступности, базовые обновления.</p>
+          </article>
+
+          <article class="detail-card">
+            <h3>5 правок/год бесплатно</h3>
+            <p>Точечные изменения без редизайна и новых фич.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="cta-box">
+          <p class="label">Следующий шаг</p>
+          <h2>Перейти к договору</h2>
+          <div class="section-divider" aria-hidden="true"></div>
+          <p>
+            Если формат и состав работ подходят, следующий шаг один: перейти в диалог и подтвердить запуск с финальными вводными по контенту и каталогу.
+          </p>
+          <div class="section-divider" aria-hidden="true"></div>
+
+          <div class="cta-actions">
+            <a class="cta-telegram" href="https://t.me/c/3595728175/1" target="_blank" rel="noreferrer">Перейти в Telegram</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="shell">
+      <p class="page-credit">Сделано командой ЮНИ.ai</p>
+    </div>
+
+    <script>
+      const topbarWrap = document.querySelector('.topbar-wrap');
+      const burgerButton = document.getElementById('burgerButton');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+      const revealSections = document.querySelectorAll('main > section');
+      const priceSection = document.getElementById('price');
+      const priceValue = priceSection ? priceSection.querySelector('.price-value') : null;
+      const priceDiscount = priceSection ? priceSection.querySelector('.price-discount') : null;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let lastScrollY = window.scrollY;
+      let hasRunPriceAnimation = false;
+
+      revealSections.forEach((section, index) => {
+        section.classList.add('reveal-on-scroll');
+        if (index === 0) {
+          section.classList.add('is-visible');
+        }
+      });
+
+      const formatRubles = (value) => `${new Intl.NumberFormat('ru-RU').format(Math.round(value))} ₽`;
+
+      const animateNumber = (from, to, duration, onUpdate, onComplete) => {
+        const start = performance.now();
+
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = progress < 0.5
+            ? 4 * Math.pow(progress, 3)
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+          const currentValue = from + (to - from) * eased;
+          onUpdate(currentValue);
+
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else if (onComplete) {
+            onComplete();
+          }
+        };
+
+        requestAnimationFrame(tick);
+      };
+
+      const runPriceAnimation = () => {
+        if (!priceValue || hasRunPriceAnimation) return;
+        hasRunPriceAnimation = true;
+
+        const peakValue = 157600;
+        const finalValue = 149900;
+
+        if (prefersReducedMotion) {
+          if (priceDiscount) {
+            priceDiscount.classList.remove('is-visible');
+          }
+          priceValue.textContent = formatRubles(finalValue);
+          return;
+        }
+
+        priceValue.classList.remove('is-struck');
+        if (priceDiscount) {
+          priceDiscount.classList.remove('is-visible');
+        }
+        priceValue.textContent = formatRubles(0);
+
+        animateNumber(0, peakValue, 3200, (value) => {
+          priceValue.textContent = formatRubles(value);
+        }, () => {
+          priceValue.textContent = formatRubles(peakValue);
+
+          setTimeout(() => {
+            if (priceDiscount) {
+              priceDiscount.classList.add('is-visible');
+            }
+
+            setTimeout(() => {
+              if (priceDiscount) {
+                priceDiscount.classList.remove('is-visible');
+              }
+
+              priceValue.classList.add('is-struck');
+
+              setTimeout(() => {
+                animateNumber(peakValue, finalValue, 1200, (value) => {
+                  priceValue.textContent = formatRubles(value);
+                }, () => {
+                  priceValue.textContent = formatRubles(finalValue);
+                  setTimeout(() => {
+                    priceValue.classList.remove('is-struck');
+                  }, 180);
+                });
+              }, 1000);
+            }, 1000);
+          }, 1500);
+        });
+      };
+
+      const handleHeaderScroll = () => {
+        if (!topbarWrap) return;
+
+        const currentScrollY = window.scrollY;
+        const isMenuOpen = mobileMenu ? mobileMenu.classList.contains('is-open') : false;
+
+        topbarWrap.classList.toggle('is-scrolled', currentScrollY > 8);
+
+        if (isMenuOpen) {
+          topbarWrap.classList.remove('is-hidden');
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        if (currentScrollY <= 8) {
+          topbarWrap.classList.remove('is-hidden');
+        } else if (currentScrollY > lastScrollY + 6) {
+          topbarWrap.classList.add('is-hidden');
+        } else if (currentScrollY < lastScrollY - 6) {
+          topbarWrap.classList.remove('is-hidden');
+        }
+
+        lastScrollY = currentScrollY;
+      };
+
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.16,
+          rootMargin: '0px 0px -8% 0px',
+        }
+      );
+
+      revealSections.forEach((section, index) => {
+        if (index !== 0) {
+          revealObserver.observe(section);
+        }
+      });
+
+      if (priceSection && priceValue) {
+        const priceObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                runPriceAnimation();
+                priceObserver.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.35,
+            rootMargin: '0px 0px -8% 0px',
+          }
+        );
+
+        priceObserver.observe(priceSection);
+      }
+
+      if (burgerButton && mobileMenu) {
+        burgerButton.addEventListener('click', () => {
+          const isOpen = mobileMenu.classList.toggle('is-open');
+          burgerButton.classList.toggle('is-open', isOpen);
+          burgerButton.setAttribute('aria-expanded', String(isOpen));
+          if (isOpen && topbarWrap) {
+            topbarWrap.classList.remove('is-hidden');
+          }
+        });
+
+        mobileLinks.forEach((link) => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.remove('is-open');
+            burgerButton.classList.remove('is-open');
+            burgerButton.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+
+      window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+      handleHeaderScroll();
+    </script>
+  </body>
+</html>
